@@ -3,10 +3,6 @@ import React from 'react'
 const WeatherBox = ({weather}) => {
     console.log("Weather?", weather)
 
-//     if (!data) {
-//         return <div>Loading...</div>
-//     };
-
 
     return (
         <div className='weather-box'>
