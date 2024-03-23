@@ -3,9 +3,9 @@ import React from 'react'
 const WeatherBox = ({ weather }) => {
     console.log("Weather?", weather)
 
-    const convertCelsiusToFahrenheit=(Celsius)=> {
-        return ((Celsius * 9 / 5) + 32).toFixed(2);
-    }
+const convertCelsiusToFahrenheit = (Celsius) => {
+    return ((Celsius * 9 / 5) + 32).toFixed(2);
+}
 
 
     return (
