@@ -20,7 +20,7 @@ const WeatherBox = ({weather}) => {
             <div>일출: {new Date(weather?.sys.sunrise * 1000).toLocaleTimeString()}</div>
             <div>일몰: {new Date(weather?.sys.sunset * 1000).toLocaleTimeString()}</div>
             <p></p>
-            <h3>날씨: {weather?.weather[0].description}</h3>
+            <h3>날씨상태: {weather?.weather[0].description}</h3>
         </div>
     )
 };
