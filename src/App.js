@@ -32,7 +32,7 @@ function App() {
     getCurrentLocation()
 
 
-  }, [])
+  }, [getCurrentLocation])
 
   return (
     <div className="container">
