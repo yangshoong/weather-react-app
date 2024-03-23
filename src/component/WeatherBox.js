@@ -1,17 +1,21 @@
 import React from 'react'
 
-const WeatherBox = ({weather}) => {
+const WeatherBox = ({ weather }) => {
     console.log("Weather?", weather)
+
+    const convertCelsiusToFahrenheit=(Celsius)=> {
+        return ((Celsius * 9 / 5) + 32).toFixed(2);
+    }
 
 
     return (
         <div className='weather-box'>
             <h2>{weather?.name}의 날씨 정보</h2>
             <p></p>
-            <h3>기온: {weather?.main.temp}℃</h3>
-            <div>체감 온도: {weather?.main.feels_like}℃</div>
-            <div>최저 기온: {weather?.main.temp_min}℃</div>
-            <div>최고 기온: {weather?.main.temp_max}℃</div>
+            <h3>기온: {weather?.main.temp}℃ / {convertCelsiusToFahrenheit(weather?.main.temp)}℉</h3>
+            <div>체감 온도: {weather?.main.feels_like}℃ / {convertCelsiusToFahrenheit(weather?.main.feels_like)}℉</div>
+            <div>최저 기온: {weather?.main.temp_min}℃ / {convertCelsiusToFahrenheit(weather?.main.temp_min)}℉</div>
+            <div>최고 기온: {weather?.main.temp_max}℃ / {convertCelsiusToFahrenheit(weather?.main.temp_max)}℉</div>
             <div>압력: {weather?.main.pressure}hPa</div>
             <div>습도: {weather?.main.humidity}%</div>
             <div>풍속: {weather?.wind.speed}m/s</div>
