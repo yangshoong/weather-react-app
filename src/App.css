@@ -27,3 +27,7 @@ body {
   border-radius:30px;
 
 }
+
+.weather-button .btn:not(:last-child) {
+  margin-right: 10px;
+}

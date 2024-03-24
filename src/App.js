@@ -3,59 +3,79 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import WeatherBox from "./component/WeatherBox";
 import WeatherButton from "./component/WeatherButton";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const APIkey = "0042c99930b92e7dd6a3e12310f689b7"
 
 function App() {
-
   const [weather, setWeather] = useState(null);
-
-  const [cities, setCities] = useState(['seoul', 'new york', 'toronto', 'paris'])
-
+  const [cities, setCities] = useState(['seoul', 'new york', 'toronto', 'paris']);
   const [city, setCity] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [activeCity, setActiveCity] = useState("");
 
-
-  const getWeatherByCruuentLocation = async (lat, lon) => {
-    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${APIkey}`
-    let response = await fetch(url);
-    let data = await response.json();
-    setWeather(data);
+  const getWeatherByCurrentLocation = async (lat, lon) => {
+    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${APIkey}`;
+    setLoading(true);
+    try {
+      let response = await fetch(url);
+      if (!response.ok) throw new Error(`Error: ${response.status}`);
+      let data = await response.json();
+      setWeather(data);
+    } catch (error) {
+      console.error("Failed to fetch weather data", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getWeatherByCity = async () => {
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIkey}`
-    let response = await fetch(url);
-    let data = await response.json();
-    setWeather(data);
-  }
-
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIkey}`;
+    setLoading(true);
+    try {
+      let response = await fetch(url);
+      if (!response.ok) throw new Error(`Error: ${response.status}`);
+      let data = await response.json();
+      setWeather(data);
+    } catch (error) {
+      console.error("Failed to fetch weather data by city", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const getCurrentLocation = () => {
       navigator.geolocation.getCurrentPosition((position) => {
-        let lat = position.coords.latitude;
-        let lon = position.coords.longitude;
-        getWeatherByCruuentLocation(lat, lon)
+        getWeatherByCurrentLocation(position.coords.latitude, position.coords.longitude);
+      }, (error) => {
+        console.error("Geolocation is not available", error);
+        setLoading(false); 
       });
     };
-    if (city === "") { 
+
+    if (city === "") {
       getCurrentLocation();
-    }else{
+    } else {
       getWeatherByCity();
     }
-    
-  }, [city])
+  }, [city]);
 
+  const handleSetCity = (selectedCity) => {
+    setCity(selectedCity);
+    setActiveCity(selectedCity);
+  };
 
   return (
     <div className="container">
-      <div>
-        <WeatherBox weather={weather} />
-        <WeatherButton cities={cities} setCity={setCity} />
-      </div>
-
-
-
+      {loading ? (
+        <ClipLoader color="#f88c6b" loading={loading} size={150} />
+      ) : (
+        <>
+          <WeatherBox weather={weather} />
+          <WeatherButton cities={cities} setCity={handleSetCity} activeCity={activeCity} />
+        </>
+      )}
     </div>
   );
 }
