@@ -10,7 +10,9 @@ function App() {
 
   const [weather, setWeather] = useState(null);
 
+  const [cities, setCities] = useState(['seoul', 'new york', 'toronto', 'paris'])
 
+  const [city, setCity] = useState("");
 
 
   const getWeatherByCruuentLocation = async (lat, lon) => {
@@ -18,8 +20,14 @@ function App() {
     let response = await fetch(url);
     let data = await response.json();
     setWeather(data);
-
   };
+
+  const getWeatherByCity = async () => {
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIkey}`
+    let response = await fetch(url);
+    let data = await response.json();
+    setWeather(data);
+  }
 
 
   useEffect(() => {
@@ -30,15 +38,20 @@ function App() {
         getWeatherByCruuentLocation(lat, lon)
       });
     };
+    if (city === "") { 
+      getCurrentLocation();
+    }else{
+      getWeatherByCity();
+    }
+    
+  }, [city])
 
-    getCurrentLocation();
-  }, [])
 
   return (
     <div className="container">
       <div>
         <WeatherBox weather={weather} />
-        <WeatherButton />
+        <WeatherButton cities={cities} setCity={setCity} />
       </div>
 
 
