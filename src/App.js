@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import WeatherBox from "./component/WeatherBox";
@@ -9,7 +9,7 @@ const APIkey = "0042c99930b92e7dd6a3e12310f689b7"
 
 function App() {
   const [weather, setWeather] = useState(null);
-  const [cities, setCities] = useState(['seoul', 'new york', 'toronto', 'paris']);
+  const cities = ['seoul', 'new york', 'toronto', 'paris'];
   const [city, setCity] = useState("");
   const [loading, setLoading] = useState(true);
   const [activeCity, setActiveCity] = useState("");
@@ -29,7 +29,7 @@ function App() {
     }
   };
 
-  const getWeatherByCity = async () => {
+  const getWeatherByCity = useCallback(async () => {
     let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIkey}`;
     setLoading(true);
     try {
@@ -42,7 +42,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };
+  },[city]);
 
   useEffect(() => {
     const getCurrentLocation = () => {
@@ -59,7 +59,7 @@ function App() {
     } else {
       getWeatherByCity();
     }
-  }, [city]);
+  }, [city, getWeatherByCity]);
 
   const handleSetCity = (selectedCity) => {
     setCity(selectedCity);
